@@ -42,4 +42,24 @@ class DailyRepository {
         .delete()
         .eq('id', id);
   }
+
+  Future<DailyEntryModel?> fetchEntryByDate(String dateKey) async {
+  try {
+    final res = await _client
+        .from('daily_entries')
+        .select()
+        .eq('date', dateKey)
+        .limit(1)
+        .maybeSingle();
+
+    if (res == null) return null;
+
+    return DailyEntryModel.fromMap(res);
+  } catch (e) {
+    print("Error fetching entry for $dateKey: $e");
+    return null;
+  }
+}
+
+
 }
